@@ -1,0 +1,4 @@
+*.md
+.exercism
+erl_crash.dump
+.vscode
