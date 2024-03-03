@@ -9,7 +9,7 @@ defmodule HighSchoolSweetheart do
     name
     |> first_letter()
     |> String.upcase()
-    |> then(fn name_initial -> ~s(#{name_initial}.) end)
+    |> then(&(&1 <> "."))
   end
 
   def initials(full_name) do
