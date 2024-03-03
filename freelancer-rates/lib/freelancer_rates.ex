@@ -11,14 +11,17 @@ defmodule FreelancerRates do
     hourly_rate
     |> daily_rate()
     |> apply_discount(discount)
-    |> then(&(@month_billable_days * &1))
+    |> scale_to_month()
     |> ceil()
   end
 
   def days_in_budget(budget, hourly_rate, discount) do
     daily_rate(hourly_rate)
     |> apply_discount(discount)
-    |> then(&(budget / &1))
-    |> Float.floor(1)
+    |> then(fn discounted_daily_rate ->
+      Float.floor(budget / discounted_daily_rate, 1)
+    end)
   end
+
+  defp scale_to_month(daily_rate), do: @month_billable_days * daily_rate
 end
