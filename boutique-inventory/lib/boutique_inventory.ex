@@ -4,8 +4,8 @@ defmodule BoutiqueInventory do
   def with_missing_price(inventory), do: Enum.reject(inventory, & &1.price)
 
   def update_names(inventory, old_word, new_word) do
-    Enum.map(inventory, fn x ->
-      %{x | name: String.replace(x.name, old_word, new_word)}
+    Enum.map(inventory, fn item ->
+      %{item | name: String.replace(item.name, old_word, new_word)}
     end)
   end
 
