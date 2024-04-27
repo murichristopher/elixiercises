@@ -7,7 +7,7 @@ defmodule BoutiqueSuggestions do
     for top <- tops,
         bottom <- bottoms,
         bottom[:base_color] != top[:base_color],
-        bottom[:price] + top[:price] < maximum_price do
+        bottom[:price] + top[:price] <= maximum_price do
       {top, bottom}
     end
   end
