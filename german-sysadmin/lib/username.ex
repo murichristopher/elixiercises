@@ -1,31 +1,27 @@
 defmodule Username do
   @german_to_latin_char %{
-    ?ä => [?a, ?e],
-    ?ö => [?o, ?e],
-    ?ü => [?u, ?e],
+    ?ä => [?e, ?a],
+    ?ö => [?e, ?o],
+    ?ü => [?e, ?u],
     ?ß => [?s, ?s]
   }
-  @german_chars Map.keys(@german_to_latin_char)
-
-  @alphabetic_chars_unicode ?a..?z
-  @allowed_chars Enum.to_list(@alphabetic_chars_unicode) ++ [?_]
 
   def sanitize(username) do
-    do_sanitize(username, ~c"")
+    do_sanitize(username, [])
   end
 
   defp do_sanitize([head | tail], chars) do
-    case head do
-      head when head in @allowed_chars ->
-        do_sanitize(tail, chars ++ [head])
+    cond do
+      head in ?a..?z or head == ?_ ->
+        do_sanitize(tail, [head | chars])
 
-      head when head in @german_chars ->
-        do_sanitize(tail, chars ++ @german_to_latin_char[head])
+      Map.has_key?(@german_to_latin_char, head) ->
+        do_sanitize(tail, @german_to_latin_char[head] ++ chars)
 
-      _ ->
+      true ->
         do_sanitize(tail, chars)
     end
   end
 
-  defp do_sanitize([], chars), do: chars
+  defp do_sanitize([], chars), do: Enum.reverse(chars)
 end
